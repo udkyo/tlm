@@ -1,4 +1,5 @@
-#!/bin/bash -ex
+#!/bin/bash
+set -ex
 
 echo start build at `date`
 
@@ -60,13 +61,12 @@ FILE (COPY bin erts-${version} lib releases usr DESTINATION \"\${CMAKE_INSTALL_P
 CONFIGURE_FILE(\${CMAKE_CURRENT_SOURCE_DIR}/erl.ini.in \${CMAKE_INSTALL_PREFIX}/bin/erl.ini)
 " > CMakeLists.txt
 
-echo "1WD: $(pwd)"
-ls -al
-
 ## tar 'em up
 cp VERSION.txt erl.ini.in CMakeLists.txt "${installdir}"
 cd "${installdir}"
-(cd "${installdir}" && printf "# Contents of installdir:\n%s\n" "$(ls -la)"
+
+printf "# Contents of installdir:\n%s\n" "$(ls -la)"
+
 tar --exclude="Install.exe" --exclude="Install.ini" --exclude="Uninstall.exe" -zcf ${thisdir}/${package_name_tgz} *
 printf $(md5sum ${thisdir}/${package_name_tgz}) > ${thisdir}/${package_name_md5}
 rm -f VERSION.txt erl.ini.in CMakeLists.txt
@@ -76,7 +76,7 @@ rm -f VERSION.txt erl.ini.in CMakeLists.txt
 
 rm -f VERSION.txt erl.ini.in CMakeLists.txt
 
-echo "2WD: $(pwd)"
-ls -al 
+echo "Build dir:"
+ls -la "${thisdir}"
 
-echo end build at `date`
+echo "end build at $(date)"
