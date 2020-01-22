@@ -19,7 +19,8 @@ patch_ssl() {
 }
 
 # Convert dos2unix
-find . -type f |xargs dos2unix
+echo "Converting line endings"
+find . -type f |xargs dos2unix &>/dev/null
 
 installdir="/cygdrive/c/Program Files/erl${version}"
 mkdir -p "${installdir}"
